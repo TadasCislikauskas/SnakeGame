@@ -71,7 +71,7 @@ public class Main extends Application {
                     direction = Direction.right;
                 }
             });
-            //starting snake
+            //starting snake parts
             snake.add(new Corner(width / 2, height / 2));
             snake.add(new Corner(width / 2, height / 2));
             snake.add(new Corner(width / 2, height / 2));
@@ -84,6 +84,56 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+
+    //    tick
+    public static void tick(GraphicsContext graphicsContext) {
+        if (gameOver) {
+
+            return;
+        }
+        for (int i = snake.size() - 1; i >= 1; i--) {
+            snake.get(i).x = snake.get(i - 1).x;
+            snake.get(i).y = snake.get(i - 1).y;
+        }
+        switch (direction) {
+            case up:
+                snake.get(0).y--;
+                if (snake.get(0).y < 0) {
+                    gameOver = true;
+                }
+                break;
+            case down:
+                snake.get(0).y++;
+                if (snake.get(0).y > height) {
+                    gameOver = true;
+                }
+                break;
+
+            case left:
+                snake.get(0).x--;
+                if (snake.get(0).x < 0) {
+                    gameOver = true;
+                }
+                break;
+            case right:
+                snake.get(0).x++;
+                if (snake.get(0).x > width) {
+                    gameOver = true;
+                }
+                break;
+        }
+
+//    eat food
+        if (foodX == snake.get(0).x && foodY == snake.get(0).y) {
+            snake.add(new Corner(-1, -1));
+            newFood();
+        }
+    }
+
+
+
+
+
 
     //    snake food stuff
     public static void newFood() {
