@@ -9,6 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -45,10 +47,12 @@ public class Main extends Application {
                 public void handle(long now) {
                     if (lastTick == 0) {
                         lastTick = now;
+                        tick(graphicsContext);
                         return;
                     }
                     if (now - lastTick > 1000000000 / speed) {
                         lastTick = now;
+                        tick(graphicsContext);
                     }
                 }
             }
@@ -88,7 +92,9 @@ public class Main extends Application {
     //    tick
     public static void tick(GraphicsContext graphicsContext) {
         if (gameOver) {
-
+            graphicsContext.setFill(Color.RED);
+            graphicsContext.setFont(new Font("", 50));
+            graphicsContext.fillText("GAME OVER", 100, 250);
             return;
         }
         for (int i = snake.size() - 1; i >= 1; i--) {
@@ -128,11 +134,28 @@ public class Main extends Application {
             snake.add(new Corner(-1, -1));
             newFood();
         }
+
+//        self eating
+        for (int i = 1; i < snake.size(); i++) {
+            if (snake.get(0).x == snake.get(i).x && snake.get(0).y == snake.get(i).y) {
+                gameOver = true;
+            }
+        }
+//background
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.fillRect(0, 0, width * cornerSize, height * cornerSize);
+
+//        score
+        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.setFont(new Font("", 30));
+        graphicsContext.fillText("Rezultatas:", +(speed - 6), 10, 30);
+
+
+//        random food colour
+        Color color = Color.WHITE;
+
+
     }
-
-
-
-
 
 
     //    snake food stuff
